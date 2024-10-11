@@ -19,16 +19,22 @@ public class MachineDataProcessor(ICoffeeCountStore coffeeCountStore) {
     }
 
     private void ProcessItem(MachineDataItem dataItem) {
-        if (_previousItem is null || _previousItem.CreatedAt < dataItem.CreatedAt) {
-            if (!_countPerCoffeeType.ContainsKey(dataItem.CoffeeType)) {
-                _countPerCoffeeType.Add(dataItem.CoffeeType, 1);
-            }
-            else {
-                _countPerCoffeeType[dataItem.CoffeeType]++;
-            }
-
-            _previousItem = dataItem;
+        if (!IsNewerThanPreviousItem(dataItem)) {
+            return;
         }
+
+        if (!_countPerCoffeeType.ContainsKey(dataItem.CoffeeType)) {
+            _countPerCoffeeType.Add(dataItem.CoffeeType, 1);
+        }
+        else {
+            _countPerCoffeeType[dataItem.CoffeeType]++;
+        }
+
+        _previousItem = dataItem;
+    }
+
+    private bool IsNewerThanPreviousItem(MachineDataItem dataItem) {
+        return _previousItem is null || _previousItem.CreatedAt < dataItem.CreatedAt;
     }
 
     private void SaveCountPerCoffeeType() {
