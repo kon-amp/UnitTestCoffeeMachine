@@ -3,12 +3,19 @@ using WiredBrainCoffee.DataProcessor.Model;
 
 namespace WiredBrainCoffee.DataProcessor.Processing; 
 public class MachineDataProcessorTests {
+    private readonly FakeCoffeeCountStore _coffeeCountStore;
+    private readonly MachineDataProcessor _machineDataProcessor;
+
+    // Constructor runs before each unit test
+    public MachineDataProcessorTests()
+    {
+        _coffeeCountStore = new FakeCoffeeCountStore();
+        _machineDataProcessor = new MachineDataProcessor(_coffeeCountStore);
+    }
 
     [Fact]
     public void ShouldSaveCountPerCoffeeType() {
         // Arrange
-        var coffeeCountStore = new FakeCoffeeCountStore();
-        var machineDataProcessor = new MachineDataProcessor(coffeeCountStore);
         var items = new[] {
             new MachineDataItem("Cappuccino", new DateTime(2022,10,27,8,0,0)),
             new MachineDataItem("Cappuccino", new DateTime(2022,10,27,9,0,0)),
@@ -16,16 +23,16 @@ public class MachineDataProcessorTests {
         };
 
         // Act
-        machineDataProcessor.ProcessItems(items);
+        _machineDataProcessor.ProcessItems(items);
 
         // Assert
-        Assert.Equal(2, coffeeCountStore.SaveItems.Count);
+        Assert.Equal(2, _coffeeCountStore.SaveItems.Count);
 
-        var item = coffeeCountStore.SaveItems[0];
+        var item = _coffeeCountStore.SaveItems[0];
         Assert.Equal("Cappuccino", item.CoffeeType);
         Assert.Equal(2, item.Count);
 
-        item = coffeeCountStore.SaveItems[1];
+        item = _coffeeCountStore.SaveItems[1];
         Assert.Equal("Espresso", item.CoffeeType);
         Assert.Equal(1, item.Count);
     }
@@ -34,19 +41,17 @@ public class MachineDataProcessorTests {
     [Fact]
     public void ShouldClearPreviousCoffeeCount() {
         // Arrange
-        var coffeeCountStore = new FakeCoffeeCountStore();
-        var machineDataProcessor = new MachineDataProcessor(coffeeCountStore);
         var items = new[] {
             new MachineDataItem("Cappuccino", new DateTime(2022,10,27,8,0,0))
         };
 
         // Act
-        machineDataProcessor.ProcessItems(items);
-        machineDataProcessor.ProcessItems(items);
+        _machineDataProcessor.ProcessItems(items);
+        _machineDataProcessor.ProcessItems(items);
 
         // Assert
-        Assert.Equal(2, coffeeCountStore.SaveItems.Count);
-        foreach(var item in coffeeCountStore.SaveItems) {
+        Assert.Equal(2, _coffeeCountStore.SaveItems.Count);
+        foreach(var item in _coffeeCountStore.SaveItems) {
             Assert.Equal("Cappuccino", item.CoffeeType);
             Assert.Equal(1, item.Count);
         }
