@@ -27,7 +27,7 @@ namespace WiredBrainCoffee.DataProcessor.Parsing {
             }
 
             if (!DateTime.TryParse(lineItems[1], CultureInfo.InvariantCulture, result: out DateTime datetime)) {
-                throw new Exception($"Invalid datetime in csv line: {csvLine}");
+                throw new Exception($"Invalid datetime: {csvLine}");
             }
 
             return new MachineDataItem(lineItems[0], datetime);
