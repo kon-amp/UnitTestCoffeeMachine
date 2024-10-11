@@ -3,10 +3,13 @@ public class CsvLineParserTests {
 
     [Fact]
     public void ShouldParseValidLine() {
+        // Arrange
         string[] csvLines = ["Cappuccino;10/27/2022 8:06:04 AM"];
 
+        // Act
         var machineDataItems = CsvLineParser.Parse(csvLines);
 
+        // Assert
         Assert.NotNull(machineDataItems);
         Assert.Single(machineDataItems);
         Assert.Equal("Cappuccino", machineDataItems[0].CoffeeType);
