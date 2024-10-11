@@ -1,15 +1,7 @@
-﻿namespace WiredBrainCoffee.DataProcessor.Model
-{
-    public class MachineDataItem
-    {
-        public MachineDataItem(string coffeeType, DateTime createdAt)
-        {
-            CoffeeType = coffeeType;
-            CreatedAt = createdAt;
-        }
+﻿namespace WiredBrainCoffee.DataProcessor.Model;
 
-        public string CoffeeType { get; }
-
-        public DateTime CreatedAt { get; }
-    }
-}
+/// <summary>
+/// This method performs a specific action. For more details, visit 
+/// <see href="https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/records">this link</see>.
+/// </summary>
+public record MachineDataItem(string CoffeeType, DateTime CreatedAt);
