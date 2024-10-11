@@ -26,6 +26,12 @@ namespace WiredBrainCoffee.DataProcessor.Parsing
         {
             var lineItems = csvLine.Split(';');
 
+            if (lineItems.Length !=2) {
+#pragma warning disable S112 // General or reserved exceptions should never be thrown
+                throw new Exception();
+#pragma warning restore S112 // General or reserved exceptions should never be thrown
+            }
+
             return new MachineDataItem(lineItems[0], DateTime.Parse(lineItems[1], CultureInfo.InvariantCulture));
         }
     }

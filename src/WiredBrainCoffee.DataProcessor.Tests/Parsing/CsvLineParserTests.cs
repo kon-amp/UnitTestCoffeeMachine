@@ -28,5 +28,14 @@ public class CsvLineParserTests {
         Assert.NotNull(machineDataItems);
         Assert.Empty(machineDataItems);
     }
+
+    [Fact]
+    public void ShouldThrowExceptionForInvalindLines() {
+        // Arrange
+        string[] csvLines = ["Cappuccino"];
+
+        // Act
+        Assert.Throws<Exception>(() => CsvLineParser.Parse(csvLines));
+    }
 }
 
