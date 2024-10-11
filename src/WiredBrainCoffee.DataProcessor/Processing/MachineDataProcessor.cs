@@ -5,8 +5,10 @@ namespace WiredBrainCoffee.DataProcessor.Processing;
 
 public class MachineDataProcessor(ICoffeeCountStore coffeeCountStore) {
     private readonly Dictionary<string, int> _countPerCoffeeType = [];
+    private MachineDataItem? _previousItem;
 
     public void ProcessItems(MachineDataItem[] dataItems) {
+        _previousItem = null;
         _countPerCoffeeType.Clear();
 
         foreach (var dataItem in dataItems) {
@@ -17,11 +19,15 @@ public class MachineDataProcessor(ICoffeeCountStore coffeeCountStore) {
     }
 
     private void ProcessItem(MachineDataItem dataItem) {
-        if (!_countPerCoffeeType.ContainsKey(dataItem.CoffeeType)) {
-            _countPerCoffeeType.Add(dataItem.CoffeeType, 1);
-        }
-        else {
-            _countPerCoffeeType[dataItem.CoffeeType]++;
+        if (_previousItem is null || _previousItem.CreatedAt < dataItem.CreatedAt) {
+            if (!_countPerCoffeeType.ContainsKey(dataItem.CoffeeType)) {
+                _countPerCoffeeType.Add(dataItem.CoffeeType, 1);
+            }
+            else {
+                _countPerCoffeeType[dataItem.CoffeeType]++;
+            }
+
+            _previousItem = dataItem;
         }
     }
 
