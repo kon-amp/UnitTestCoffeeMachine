@@ -28,7 +28,7 @@ namespace WiredBrainCoffee.DataProcessor.Parsing
 
             if (lineItems.Length !=2) {
 #pragma warning disable S112 // General or reserved exceptions should never be thrown
-                throw new Exception();
+                throw new Exception($"Invalid csv line: {csvLine}");
 #pragma warning restore S112 // General or reserved exceptions should never be thrown
             }
 
